@@ -1,6 +1,7 @@
 package com.example.forum.dto;
 
 public class GithubUserDTO {
+
     private String login;
     private Long id;
     private String bio;

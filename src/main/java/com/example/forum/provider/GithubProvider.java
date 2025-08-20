@@ -53,6 +53,7 @@ public class GithubProvider {
         try {
             Response response = client.newCall(request).execute();
             String string = response.body().string();
+            LOGGER.info("GitHub User Response: " + string);
             GithubUserDTO githubUserDTO = JSON.parseObject(string, GithubUserDTO.class);
             return githubUserDTO;
         } catch (IOException e) {
