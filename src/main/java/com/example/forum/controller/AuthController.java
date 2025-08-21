@@ -56,7 +56,7 @@ public class AuthController {
         String accessToken = githubProvider.getAccessToken(accessTokenDTO);
         GithubUserDTO githubUser = githubProvider.getUser(accessToken);
         LOGGER.info("GitHub User: {}", githubUser != null ? githubUser.getLogin() : "null");
-        if (githubUser != null) {
+        if (githubUser != null && githubUser.getId() != null) {
             User user = new User();
             String token = UUID.randomUUID().toString();
             user.setName(githubUser.getLogin());
@@ -64,6 +64,7 @@ public class AuthController {
             user.setToken(token);
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
+            user.setAvatarUrl(githubUser.getAvatar_url());
             userMapper.insert(user);
             response.addCookie(new Cookie("token", token)); // Set token in cookie
             return "redirect:/"; // Redirect to home page after successful login
