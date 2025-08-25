@@ -1,13 +1,22 @@
 package com.example.forum.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import com.example.forum.dto.QuestionDTO;
 import com.example.forum.mapper.UserMapper;
 import jakarta.servlet.http.Cookie;
+
 import com.example.forum.model.User;
+import com.example.forum.service.QuestionService;
+
 import jakarta.servlet.http.HttpServletRequest;
+
+import org.springframework.ui.Model;
 
 @Controller
 public class IndexController {
@@ -15,8 +24,12 @@ public class IndexController {
 	@Autowired
 	private UserMapper userMapper;
 
+	@Autowired
+	private QuestionService questionService;
+
 	@GetMapping("/")
-	public String index(HttpServletRequest request) {
+	public String index(HttpServletRequest request,
+			Model model) {
 		Cookie[] cookies = request.getCookies();
 		if (cookies != null && cookies.length != 0) {
 			for (Cookie cookie : cookies) {
@@ -31,6 +44,9 @@ public class IndexController {
 			}
 
 		}
+
+		List<QuestionDTO> questionsList = questionService.list();
+		model.addAttribute("questions", questionsList);
 		return "index";
 	}
 }
